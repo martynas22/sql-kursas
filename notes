@@ -1,0 +1,150 @@
+Mysql -uroot
+
+CREATE USER 'sqluser'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
+GRANT ALL PRIVILEGES ON *.* TO 'sqluser'@'%';
+
+CREATE DATABASE test_test;
+CREATE DATABASE `create`;
+DROP DATABASE test; - delete database;
+------------------------------------
+text -> CHAR(X) - lenght x. VARCHAR(x) - commont for text, LONGTEXT, TEXT, ENUM .
+numeric -> INT , DECIMAL, NUMERIC, FLOAT
+date -> DATE, DATETIME, 
+other -> BOOLEAN, JSON
+
+
+Create TABLE test_tests (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    koja INT NOT NULL QUNIQUE,
+    full_name VARCHAR(200) NOT NULL,
+    salary  INT CHECK (salary > 0),
+    current_status ENUM('good', 'great', 'ok'), -- tik sitie values gali buti
+    is_good BOOLEAN NOT NULL,
+    message TEXT,
+    date_sent TIMESTAMP DEFAULY CURRENT_TIMESTAMP,
+    day DATE
+);
+
+INSERT INTO test_tests VALUES ('vardas', 4000, 'good');
+INSERT INTO test_tests(full_name, salary, current_status ) VALUES ('vardas', 4000, 'good');
+
+DROP TABLE test_tests;
+MODIFY COLUMN name FLOAT(5.2);
+CREATE TEMPORARY TABLE 
+-------------------------------------
+
+INSERT INTO <table name> (<column names>)
+VALUES (<column values>);
+
+SELECT <colums> FROM <table name> WHERE <condition>;
+UPDATE <table name> SET name = 'koja, rank ='koja WHERE <condition>; 
+DELETE <table name> WHERE <condition>; 
+
+SELECT * From sales:
+SELECT name, sales, votes From sales:
+
+SELECT name as my_name From sales: - rename in quary;
+SELECT sales / 100 as new_sales From sales:
+
+SELECT * From sales WHERE id = 13 OR id = 15;
+SELECT * From sales WHERE is_true IS TRUE;
+
+SELECT * From sales WHERE data_created BETWEEN '2022-11-01' AND '2022-11-11'; - paciu dienu neimeta
+
+
+SELECT * From sales WHERE name = 'Jozas';
+
+SELECT * From sales WHERE is_true IS TRUE
+ORDER BY sales DESC LIMIT 10  OFFSET 10; - order pagal didziausiu ir 10 limits pirmos 10 skipped
+
+
+SELECT * FROM (SELECT * FROM sales WHERE name = 'Jozas') AS base_result;
+
+CREATE VIEW base_resulrt AS SELECT * FROM sales WHERE name = 'Jozas'; /stores quere and rerund each time
+
+------------SPLITING/JOINING-----------------------------------
+
+address_id INT NOT NULL // forgain id
+
+
+SELECT * From sales 
+INNER JOIN addresses ON address_id.sales = id.addresses;
+INNER JOIN cities ON cieties_id.sales = id.cities;
+
+INNER JOIN - only paching data
+LEFT JOIN - from table all rows included
+CROSS JOIN - all combinations with everything.
+UNION - merge 2 selects, and and in one.
+
+
+	
+CREATE TABLE users (
+address_id INT REFERENCES addresses (id) ON DELETE CASCADE - refrences id
+PRIMARY KEY (employes_id, project_id ) - primary key from 2 colums
+)
+
+AGGREGATE FUNCTION -. COUNT(), SUM() MAX(), MIN(), AVRAGE()
+
+GROUP BY booking_date; to aggrigate by date SUM() aggrigate + normal
+
+
+HAVING SUM(AMOUNT_BILLED) > 30; - AFTER GROUP BY tada filtras veikia
+-------------------
+
+SELECT MIN(daily_sum)
+FROM (
+	SELECT booking_date, SUM(amount_billed) as daily_sum
+	FROM bookings
+	GROUP BY booking_date
+) AS daily_table;
+
+
+windows functions - like aggregate, but adds value to each collum
+
+SUM(amont_tipped) OVER()
+SUM(amont_tipped) OVER(PARTITION BY booking_date) - group sum by date
+
+SUM(amont_tipped) OVER(PARTITION BY booking_date) ORDER BY amount_billed ASC/DESC - group sum by date
+
+CEIL(), FLOOR(), ROUND(), TRUNCATE() -numbers
+
+CONCAT(), LOWER() UPPER(), LENGTH(), TRIM() - strings
+
+EXTRACT( FROM last_checkin), WEEKDAY(last_checkin),
+ CONVERT(last_checkin, DATE), CONVERT(last_checkin, TIME) - from timestamp to day/time
+
+DATEDIFF() TIMESTAMPDIFF() DATEDIFF(), DATE_ADD(membership_start, INTERVAL 7 DAY)
+
+first_name LIKE 'ma%' - pasideda ir tada kazkas toliau tinka
+first_name LIKE '_ma%' - _ - viena raide pries
+
+EXISTS() - true/false / ususaly used as filter
+IN()
+
+SELECT amount_billed,
+	CASE WHEN amount_billerd > 30 THEN "GOOD day"
+	WHEN amount_billerd > 15 THEN "Normal day"
+	ELSE "Bad day"
+	END
+FROM table;
+	
+ START TRANSACTION - + commitina sena transaction
+	--------
+  all quary should work
+ROLLBACK - grizta pries transactiona
+COMMIT; - commitint transactiona
+SAVEPOINT save_1;
+
+----------------------------------------------- 
+                  
+                  INDEXES
+
++ updated rarly, but use WHERE alot
+
+EXPLAIN ANALYZE - bedore quarty to understand if index worth 
+CREATE INDEX salary ON users(salary) - table(collum)
+DROP INDEX salary
+UNIQUE - creates index , can added to CREATE INDEX
+
+
+
